@@ -1,11 +1,10 @@
-package lessons;
+package keys;
 
-public class Exercises {
+public class Lesson1Key {
 
-	public Exercises(){}
+	public Lesson1Key(){}
 
 	public double exercise1(){
-		// finish declaring the double variable named 'MyFirstVariable' to a value of 3
 		double myFirstVariable = 3.0;
 
 		return myFirstVariable;
