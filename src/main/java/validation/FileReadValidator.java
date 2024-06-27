@@ -7,15 +7,15 @@ import java.io.IOException;
 public class FileReadValidator {
 
     private String file;
-    private ValidatedMethod[] methods;
+    private FileReadValidatedMethod[] methods;
     
-    public FileReadValidator(String filePath, ValidatedMethod... methods){
+    public FileReadValidator(String filePath, FileReadValidatedMethod... methods){
         this.methods = methods;
 
         validateMethods(filePath);
     }
 
-    public ValidatedMethod[] getValidatedMethods(){
+    public FileReadValidatedMethod[] getValidatedMethods(){
         return methods;
     }
 
@@ -25,7 +25,7 @@ public class FileReadValidator {
             // loops through all lines in the file and 
             while ((line = br.readLine()) != null) {
                 // TODO: optimize
-                for (ValidatedMethod method : methods){
+                for (FileReadValidatedMethod method : methods){
                     for (int i = 0; i < method.getKeyExpressions().length; i++){
                         if (line == method.getKeyExpressions()[i]){ // TODO: Check output of line to see what expression needs to be
                             method.validateExpression(i);
@@ -38,7 +38,7 @@ public class FileReadValidator {
         }
     }
 
-    private static String convertFileToString(String filePath) {
+    public static String convertFileToString(String filePath) {
         StringBuilder contentBuilder = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;

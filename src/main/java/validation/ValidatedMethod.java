@@ -2,40 +2,24 @@ package validation;
 
 public class ValidatedMethod {
     
-    private String methodName;
-    private String[] keyExpressions;
-    private boolean[] validatedExpressions;
+    private String name;
+    private boolean isValidated;
 
-    public ValidatedMethod(String methodName, String[] keyExpressions){
-        this.methodName = methodName;
-        this.keyExpressions = keyExpressions;
-        this.validatedExpressions = new boolean[keyExpressions.length];
-        for (int i = 0; i < validatedExpressions.length; i++) {
-            validatedExpressions[i] = false;
-        }
+    public ValidatedMethod(String methodName){
+        this.name = methodName;
+        this.isValidated = false;
     }
 
     public String getMethodName(){
-        return methodName;
+        return name;
     }
 
-    public String[] getKeyExpressions(){
-        return keyExpressions;
+    public void validateMethod(){
+        isValidated = true;
     }
 
-    public void validateExpression(int index){
-        validatedExpressions[index] = true;
-    }
-
-    public boolean methodIsValidated(){
-        boolean isValidated = true;
-        for (boolean b : validatedExpressions){
-            if (!b){
-                isValidated = false;
-                break;
-            }
-        }
+    public boolean isMethodValid(){
         return isValidated;
     }
-
+    
 }

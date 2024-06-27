@@ -2,12 +2,12 @@ package validation;
 
 import java.lang.reflect.Type;
 
-public class TestCaseValidator extends Validator {
+public class TestCaseValidatedMethod extends ValidatedMethod {
     
     private Type[] parameterTypes;
     private Object[][] testCases;
 
-    public TestCaseValidator(String methodName, int testCaseCount){
+    public TestCaseValidatedMethod(String methodName, int testCaseCount){
         super(methodName);
         
         for (int i = 0; i < testCaseCount; i++){
@@ -22,7 +22,6 @@ public class TestCaseValidator extends Validator {
     public Object[] getTestCase(int index){
         return testCases[index];
     }
-
 
     private Object[] generateParameters(){
         Object[] newTestCase = new Object[parameterTypes.length];
