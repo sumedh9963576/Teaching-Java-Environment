@@ -53,4 +53,7 @@ public class Reporter {
         System.out.println(report.toString());
     }
 
+    public static void reportError(String methodName, String error){
+        System.out.println(ColorCodes.RED.getCode() + "\t" + methodName + " Has FAILED: " + error + ColorCodes.RESET.getCode());
+    }
 }

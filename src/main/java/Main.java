@@ -39,7 +39,7 @@ class Main {
                     keyClass = Lesson1Key.class;
                     break;
             }
-     
+
             for (Method method : lessonClass.getDeclaredMethods()){
                 validateMethod(method, keyClass);
             }
@@ -48,7 +48,7 @@ class Main {
 
     static void validateMethod(Method method, Class<?> key){
         boolean isMethodValid;
-        int testCaseCount = 4;
+        int testCaseCount = 10;
 
         try {
             method.setAccessible(true);
@@ -61,32 +61,16 @@ class Main {
                     Reporter.report(method.getName(), isMethodValid, 1);
                 } else {
                     // test case checker
-                    //isMethodValid = new TestCaseValidatedMethod(method, 4).isMethodValid();
+                    isMethodValid = new TestCaseValidatedMethod(method, 4).isMethodValid();
                 }
             } else {
                 // text analyze validation
             }
 
 
-
-
-
-
-                if (method.getParameterCount() == 0) {
-                    //Reporter.report(method.getName(), method.invoke(exercisesInstance).equals(exercisesKey.getMethod(method.getName()).invoke(exercisesKeyInstance)), 0);
-                } else{
-                    Type[] parameters = method.getGenericParameterTypes();
-                    for (Type parameter : parameters){
-                        // finish
-                    }
-
-          
-          
-                    //passReport(method.getName(), method.invoke(exercisesInstance).equals(exercisesKey.getMethod(method.getName()).invoke(exercisesKeyInstance)));
-                }
-            
+            Reporter.report(null, isMethodValid, testCaseCount);
         } catch (Exception e) {
-            e.printStackTrace();
+            Reporter.reportError(method.getName(), e.getStackTrace().toString());
         }
     }
 
