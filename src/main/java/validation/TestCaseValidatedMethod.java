@@ -1,5 +1,6 @@
 package validation;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 public class TestCaseValidatedMethod extends ValidatedMethod {
@@ -7,12 +8,12 @@ public class TestCaseValidatedMethod extends ValidatedMethod {
     private Type[] parameterTypes;
     private Object[][] testCases;
 
-    public TestCaseValidatedMethod(String methodName, int testCaseCount){
-        super(methodName);
-        
+    public TestCaseValidatedMethod(Method method, Method keyMethod, int testCaseCount){ 
+        super(method);
         for (int i = 0; i < testCaseCount; i++){
             this.testCases[i] = generateParameters();
         }
+        //if (method.invoke(method.getDeclaringClass().getConstructor().newInstance(), parameterTypes))
     }
 
     public int getTestCaseCount(){

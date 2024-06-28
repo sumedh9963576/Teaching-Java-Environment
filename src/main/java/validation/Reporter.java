@@ -36,11 +36,11 @@ public class Reporter {
         report(fileName, fileIsValid, 0);
 
         for (ValidatedMethod method : methods){
-            report(method.getMethodName(), method.isMethodValid(), 1);
+            report(method.getMethod().getName(), method.isMethodValid(), 1);
         }
     }
 
-    private static void report(String name, boolean pass, int indentationLevel){
+    public static void report(String name, boolean pass, int indentationLevel){
         StringBuilder report = new StringBuilder();
         report.append(pass ? ColorCodes.GREEN.getCode() : ColorCodes.RED.getCode());
         for (int i = 0; i < indentationLevel; i++){

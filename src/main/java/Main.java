@@ -13,62 +13,59 @@ import lessons.Lesson1;
 import validation.FileReadValidatedMethod;
 import validation.FileReadValidator;
 import validation.Reporter;
+import validation.TestCaseValidatedMethod;
 import validation.ValidatedMethod;
-
 
 class Main {
     public static void main(String[] args) {
-        //File file = new File("src/main/java/lessons/Lesson1.java");
-        File file = new File("lessons", "Lesson1.java");
         
-        StringBuilder contentBuilder = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                contentBuilder.append(line).append(System.lineSeparator());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String[] lessons = new String[] {
+            "Lesson1",
+        };
 
-        String[] expressions = {"double myFirstVariable = 3.0;"};
-        FileReadValidatedMethod[] a = {new FileReadValidatedMethod("exercise1", expressions)};
-        FileReadValidator p = new FileReadValidator(file, a);
-        System.out.println(p.getValidatedMethods()[0].isMethodValid());
+        for (String lesson : lessons){
+            //File file = new File("lessons", lesson + ".java");
+
+            Class<?> lessonClass;
+            Class<?> keyClass;
+ 
+            switch (lesson) {
+                case "Lesson1":
+                    lessonClass = Lesson1.class;
+                    keyClass = Lesson1Key.class;
+                    break;
+                default:
+                    lessonClass = Lesson1.class;
+                    keyClass = Lesson1Key.class;
+                    break;
+            }
+     
+            for (Method method : lessonClass.getDeclaredMethods()){
+                validateMethod(method, keyClass);
+            }
+        }
     }
 
-    private void deprecated(){
-        File directory = new File("src/main/java/lessons");
-        int fileCount = 0;
-        if (directory.isDirectory()) {
-            File[] files = directory.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    if (file.isFile()) {
-                        fileCount++;
-                    }
-                }
-            }
-        }
-
-        
+    static void validateMethod(Method method, Class<?> key){
+        boolean isMethodValid;
+        int testCaseCount = 4;
 
         try {
-            Class<Lesson1> exercisesClass = Lesson1.class;
-            Lesson1 exercisesInstance = new Lesson1();
-      
-            Class<Lesson1Key> exercisesKey = Lesson1Key.class;
-            Lesson1Key exercisesKeyInstance = new Lesson1Key();
-      
-            for (Method method : exercisesClass.getDeclaredMethods()) {
-                method.setAccessible(true);
-                System.out.println(method.toString());
-
-                if (method.getParameterCount() != 0){
-
+            method.setAccessible(true);
+            
+            
+            if (!method.getReturnType().equals(void.class)){
+                if (method.getParameterCount() == 0){
+                    //return value and key validation
+                    isMethodValid = method.invoke(method.getDeclaringClass().getConstructor().newInstance()).equals(key.getMethod(method.getName()).invoke(key.getConstructor().newInstance()));
+                    Reporter.report(method.getName(), isMethodValid, 1);
                 } else {
-                    
+                    // test case checker
+                    //isMethodValid = new TestCaseValidatedMethod(method, 4).isMethodValid();
                 }
+            } else {
+                // text analyze validation
+            }
 
 
 
@@ -87,9 +84,11 @@ class Main {
           
                     //passReport(method.getName(), method.invoke(exercisesInstance).equals(exercisesKey.getMethod(method.getName()).invoke(exercisesKeyInstance)));
                 }
-            }
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
 }

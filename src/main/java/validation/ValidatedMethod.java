@@ -1,17 +1,19 @@
 package validation;
 
+import java.lang.reflect.Method;
+
+
 public class ValidatedMethod {
     
-    private String name;
+    protected Method method;
     private boolean isValidated;
 
-    public ValidatedMethod(String methodName){
-        this.name = methodName;
+    public ValidatedMethod(Method method){
         this.isValidated = false;
     }
 
-    public String getMethodName(){
-        return name;
+    public Method getMethod(){
+        return method;
     }
 
     public void validateMethod(){

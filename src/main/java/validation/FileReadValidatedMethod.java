@@ -1,16 +1,18 @@
 package validation;
 
+import java.lang.reflect.Method;
+
 public class FileReadValidatedMethod extends ValidatedMethod{
 
     private String[] expressions;
     private boolean[] validatedExpressions;
 
-    public FileReadValidatedMethod(String methodName, String[] expressions){
-        super(methodName);
+    public FileReadValidatedMethod(Method method, String[] expressions){
+        super(method);
         this.expressions = expressions;
         validatedExpressions = new boolean[expressions.length];
-        for (boolean b : validatedExpressions){
-            b = false;
+        for (int i = 0; i < validatedExpressions.length; i++){
+            validatedExpressions[i] = false;
         }
     }
 
