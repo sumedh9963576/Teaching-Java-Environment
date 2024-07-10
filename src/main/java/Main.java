@@ -1,12 +1,5 @@
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import keys.Lesson1Key;
 import lessons.Lesson1;
@@ -15,20 +8,22 @@ import validation.FileReadValidator;
 import validation.Reporter;
 import validation.TestCaseValidatedMethod;
 import validation.ValidatedMethod;
+import validation.Reporter.IndentationLevel;
 
 class Main {
     public static void main(String[] args) {
-        
+        System.out.println(FileReadValidator.getMethodAsString("exercise1", "Lesson1"));
+    }
+    
+    static void run(){
         String[] lessons = new String[] {
             "Lesson1",
         };
-
+    
         for (String lesson : lessons){
-            //File file = new File("lessons", lesson + ".java");
-
             Class<?> lessonClass;
             Class<?> keyClass;
- 
+    
             switch (lesson) {
                 case "Lesson1":
                     lessonClass = Lesson1.class;
@@ -39,40 +34,68 @@ class Main {
                     keyClass = Lesson1Key.class;
                     break;
             }
-
+    
+            boolean[] passedMethods = new boolean[lessonClass.getMethods().length];
+            
             for (Method method : lessonClass.getDeclaredMethods()){
-                validateMethod(method, keyClass);
-            }
-        }
-    }
-
-    static void validateMethod(Method method, Class<?> key){
-        boolean isMethodValid;
-        int testCaseCount = 10;
-
-        try {
-            method.setAccessible(true);
-            
-            
-            if (!method.getReturnType().equals(void.class)){
-                if (method.getParameterCount() == 0){
-                    //return value and key validation
-                    isMethodValid = method.invoke(method.getDeclaringClass().getConstructor().newInstance()).equals(key.getMethod(method.getName()).invoke(key.getConstructor().newInstance()));
-                    Reporter.report(method.getName(), isMethodValid, 1);
+                if (!method.getReturnType().equals(void.class)){
+                    if (method.getParameterCount() == 0){
+                        //return value and key validation
+                        returnAndKeyValidate(method, keyClass);
+                    } else {
+                        // test case checker
+                        testCaseValidate(method, keyClass);
+                    }
                 } else {
-                    // test case checker
-                    isMethodValid = new TestCaseValidatedMethod(method, 4).isMethodValid();
+                    // text analyze validation
+                    keyExpressionValidate(method, lesson);
                 }
-            } else {
-                // text analyze validation
             }
 
+            boolean classPasses = true;
+            for (boolean b : passedMethods){
+                if (!b){
+                    classPasses = false;
+                    break;
+                }
+            }
 
-            Reporter.report(null, isMethodValid, testCaseCount);
-        } catch (Exception e) {
-            Reporter.reportError(method.getName(), e.getStackTrace().toString());
+            Reporter.report(lesson, classPasses, IndentationLevel.FILE);
+            for (int i = 0; i < lessonClass.getMethods().length; i++){
+                Reporter.report(
+                    lessonClass.getDeclaredMethods()[i].getName(), 
+                    passedMethods[i], 
+                    IndentationLevel.METHOD);
+            }
         }
     }
 
+    static void returnAndKeyValidate(Method method, Class<?> keyClass){
+        try {
+            boolean isMethodValid = method.invoke(method.getDeclaringClass().getConstructor().newInstance()).equals(keyClass.getMethod(method.getName()).invoke(keyClass.getConstructor().newInstance()));
+            Reporter.report(method.getName(), isMethodValid, IndentationLevel.METHOD);
+        } catch (Exception exception){
+            Reporter.reportError(method.getName(), exception.getMessage());
+        }
+    }
 
+    static void testCaseValidate(Method method, Class<?> keyClass){
+        try {
+            TestCaseValidatedMethod testCaseMethod = new TestCaseValidatedMethod(method, keyClass.getMethod(method.getName()), 5);
+            Reporter.report(testCaseMethod.getMethod().getName(), testCaseMethod.isMethodValid(), IndentationLevel.METHOD);
+            for (int i = 0; i < testCaseMethod.getTestCaseCount(); i++){
+                Reporter.reportTestCase(testCaseMethod.getTestCase(i), testCaseMethod.getTestCasePass(i));
+            }
+        } catch (Exception exception){
+            Reporter.reportError(method.getName(), exception.getMessage());
+        }
+    }
+
+    static void keyExpressionValidate(Method method, String fileName){
+        // TODO: optimize based on finding the name of function and stops once finds all
+        // TODO: CREATE EXPRESSIONS FORMAT
+        FileReadValidatedMethod fileReadMethod = new FileReadValidatedMethod(method, FileReadValidator.getKeyExpressions(method.getName(), fileName));
+        //new FileReadValidator(fileName).validateMethod(fileReadMethod);
+        Reporter.report(method.getName(), fileReadMethod.isMethodValid(), IndentationLevel.METHOD);
+    }
 }

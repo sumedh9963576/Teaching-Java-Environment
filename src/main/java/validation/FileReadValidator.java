@@ -4,43 +4,84 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileReadValidator {
 
-    private String file;
-    private FileReadValidatedMethod[] methods;
-    
-    public FileReadValidator(File lessonFile, FileReadValidatedMethod[] methods){
-        this.methods = methods;
+    public static void validateMethod(FileReadValidatedMethod method, String lessonFileName){
+        String file = getFileAsString(lessonFileName);
 
-        this.file = convertFileToString(lessonFile);
-        validateMethods(file);
-    }
-
-    public FileReadValidatedMethod[] getValidatedMethods(){
-        return methods;
-    }
-
-    private void validateMethods(String file){
-        for (FileReadValidatedMethod method : methods){
-            for (int i = 0; i < method.getKeyExpressions().length; i++){
-                if (file.contains(method.getKeyExpressions()[i])){
-                    method.validateExpression(i);
-                }
+        for (int i = 0; i < method.getKeyExpressions().length; i++){
+            if (file.contains(method.getKeyExpressions()[i])){
+                method.validateExpression(i);
             }
         }
     }
 
-    public static String convertFileToString(File file) {
-        StringBuilder contentBuilder = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+    private static String convertFileToString(File file) {
+        StringBuilder fileString = new StringBuilder();
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(file))) {
             String line;
-            while ((line = br.readLine()) != null) {
-                contentBuilder.append(line).append(System.lineSeparator());
+            while ((line = fileReader.readLine()) != null) {
+                fileString.append(line).append(System.lineSeparator());
             }
+            fileReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return contentBuilder.toString();
+        return fileString.toString();
+    }
+
+    public static String getFileAsString(String fileName){
+        return convertFileToString(new File("src/main/java/lessons/" + fileName + ".java"));
+    }
+
+    public static String getMethodAsString(String methodName, String fileName){
+        StringBuilder methodString = new StringBuilder();
+        File file = new File("src/main/java/lessons/" + fileName + ".java");
+        
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(file))) {
+            String line;
+            boolean inMethod = false;
+            while ((line = fileReader.readLine()) != null) {
+                //if (line.contains(methodName)) inMethod = true;
+                //if (inMethod && line == "\t}") inMethod = false;
+
+                if (inMethod) methodString.append(line).append(System.lineSeparator()).append(inMethod);
+            }
+            fileReader.close();
+        } catch (IOException e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+        return methodString.toString();
+    }
+
+    public static String[] getKeyExpressions(String methodName, String fileName){
+        //TODO: ADD STRINGBUILDER TO CHECK INDIVIDUAL METHODS
+        List<String> keyExpressions = new ArrayList<String>();
+        String file = convertFileToString(new File("src/main/java/keys/" + fileName + "Key.java"));
+
+        boolean inMethod = true;
+        for (String line : file.split("\n")) {
+            // Check if the line contains the target character
+            if (line.contains(methodName) || inMethod){
+                inMethod = true;
+            }
+            if (line == "\t}"){
+                inMethod = false;
+            }
+
+            if (line.contains("//KEY")) {
+                keyExpressions.add(line.replace("//KEY", "").trim());
+            }
+        }
+
+        String[] returnE= new String[keyExpressions.size()];
+        for (int i = 0; i < keyExpressions.size(); i++){
+            returnE[i] = keyExpressions.get(i);
+        }
+
+        return returnE;
     }
 }

@@ -14,15 +14,24 @@ public class Reporter {
         PURPLE("\033[0;35m"),
         RESET("\033[0m");
 
-        private final String code;
+        public final String code;
 
 		ColorCodes(String code) {
 			this.code = code;
 		}
+    }
 
-		public String getCode() {
-			return code;
-		}
+    public enum IndentationLevel{
+        
+        FILE(0),
+        METHOD(1),
+        TESTCASE(2);
+
+        public final int level;
+
+        IndentationLevel(int level){
+            this.level = level;
+        }
     }
 
     public static void reportFile(String fileName, ValidatedMethod[] methods){
@@ -33,27 +42,41 @@ public class Reporter {
                 break;
             }
         }
-        report(fileName, fileIsValid, 0);
+        report(fileName, fileIsValid, IndentationLevel.FILE);
 
         for (ValidatedMethod method : methods){
-            report(method.getMethod().getName(), method.isMethodValid(), 1);
+            report(method.getMethod().getName(), method.isMethodValid(), IndentationLevel.METHOD);
         }
     }
 
-    public static void report(String name, boolean pass, int indentationLevel){
+    public static void report(String name, boolean pass, IndentationLevel indentationLevel){
         StringBuilder report = new StringBuilder();
-        report.append(pass ? ColorCodes.GREEN.getCode() : ColorCodes.RED.getCode());
-        for (int i = 0; i < indentationLevel; i++){
+        report.append(pass ? ColorCodes.GREEN.code : ColorCodes.RED.code);
+        for (int i = 0; i < indentationLevel.level; i++){
             report.append("\t");
         }
         report.append(name + ": ");
         report.append(pass ? "PASS" : "FAIL");
-        report.append(ColorCodes.RESET.getCode());
+        report.append(ColorCodes.RESET.code);
 
         System.out.println(report.toString());
     }
 
+    public static void reportTestCase(Object[] testCase, boolean pass){
+        StringBuilder report = new StringBuilder();
+        report.append(pass ? ColorCodes.GREEN.code : ColorCodes.RED.code);
+        for (int i = 0; i < IndentationLevel.TESTCASE.level; i++){
+            report.append("\t");
+        }
+        report.append("The test case of " + testCase.toString() + " ");
+        report.append(pass ? "PASSES" : "FAILS");
+        report.append(ColorCodes.RESET.code);
+
+        System.out.println(report.toString());
+    }
+    
+
     public static void reportError(String methodName, String error){
-        System.out.println(ColorCodes.RED.getCode() + "\t" + methodName + " Has FAILED: " + error + ColorCodes.RESET.getCode());
+        System.out.println(ColorCodes.RED.code + "\t" + methodName + " Has FAILED: " + error + ColorCodes.RESET.code);
     }
 }

@@ -9,6 +9,7 @@ public class ValidatedMethod {
     private boolean isValidated;
 
     public ValidatedMethod(Method method){
+        this.method = method;
         this.isValidated = false;
     }
 
