@@ -45,10 +45,57 @@ public class FileReadValidator {
             String line;
             boolean inMethod = false;
             while ((line = fileReader.readLine()) != null) {
-                //if (line.contains(methodName)) inMethod = true;
-                //if (inMethod && line == "\t}") inMethod = false;
+                if (line.contains(methodName)) inMethod = true;
+                
+                if (inMethod) methodString.append(line).append(System.lineSeparator());
+                
+                if (inMethod && line.length() == 2) inMethod = false;
+            }
+            fileReader.close();
+        } catch (IOException e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+        return methodString.toString();
+    }
 
-                if (inMethod) methodString.append(line).append(System.lineSeparator()).append(inMethod);
+    public static String getMethodAsString(FileReadValidatedMethod method){
+        StringBuilder methodString = new StringBuilder();
+        File file = new File("src/main/java/lessons/" + method.getMethod().getDeclaringClass().getSimpleName() + ".java");
+        
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(file))) {
+            String line;
+            boolean inMethod = false;
+            while ((line = fileReader.readLine()) != null) {
+                if (line.contains(method.getMethod().getName())) inMethod = true;
+                
+                if (inMethod) methodString.append(line).append(System.lineSeparator());
+                
+                if (inMethod && line.length() == 2) inMethod = false;
+            }
+            fileReader.close();
+        } catch (IOException e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+        return methodString.toString();
+    }
+
+    public static String validateExpressions(FileReadValidatedMethod method){
+        StringBuilder methodString = new StringBuilder();
+        File file = new File("src/main/java/lessons/" + method.getMethod().getDeclaringClass().getSimpleName() + ".java");
+        
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(file))) {
+            String line;
+            boolean inMethod = false;
+            while ((line = fileReader.readLine()) != null) {
+                if (line.contains(method.getMethod().getName())) inMethod = true;
+                
+                if (inMethod) {
+                    for (int i = 0; i < method.getKeyExpressions().length; i++){
+                        if (line.contains(method.getKeyExpressions()[i])) method.validateExpression(i);
+                    }
+                }
+                
+                if (inMethod && line.length() == 2) inMethod = false;
             }
             fileReader.close();
         } catch (IOException e) {

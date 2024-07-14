@@ -25,7 +25,7 @@ public class Reporter {
         
         FILE(0),
         METHOD(1),
-        TESTCASE(2);
+        ERROR_MESSAGE(2);
 
         public final int level;
 
@@ -46,6 +46,9 @@ public class Reporter {
 
         for (ValidatedMethod method : methods){
             report(method.getMethod().getName(), method.isMethodValid(), IndentationLevel.METHOD);
+            if (method.getErrorMessage() != ""){
+                reportErrorMessage(fileName);
+            }  
         }
     }
 
@@ -62,6 +65,19 @@ public class Reporter {
         System.out.println(report.toString());
     }
 
+    public static void reportErrorMessage(String errorMessage){
+        StringBuilder report = new StringBuilder();
+        report.append(ColorCodes.YELLOW.code);
+        for (int i = 0; i < IndentationLevel.ERROR_MESSAGE.level; i++){
+            report.append("\t");
+        }
+        report.append("ERROR: " + errorMessage.toString());
+        report.append(ColorCodes.RESET.code);
+
+        System.out.println(report.toString());
+    }
+
+    /*-
     public static void reportTestCase(Object[] testCase, boolean pass){
         StringBuilder report = new StringBuilder();
         report.append(pass ? ColorCodes.GREEN.code : ColorCodes.RED.code);
@@ -74,9 +90,5 @@ public class Reporter {
 
         System.out.println(report.toString());
     }
-    
-
-    public static void reportError(String methodName, String error){
-        System.out.println(ColorCodes.RED.code + "\t" + methodName + " Has FAILED: " + error + ColorCodes.RESET.code);
-    }
+    */
 }
