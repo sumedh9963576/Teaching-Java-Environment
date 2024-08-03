@@ -12,6 +12,7 @@ public class Lesson1 {
 
 	public void exercise2(){
 		// declare a double variable named 'anotherVariable' to a value of 25.0;
-
+		double anotherVariable = 25.0;
+		String anothera = "a";
 	}
 }

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,31 +105,28 @@ public class FileReadValidator {
         return methodString.toString();
     }
 
-    public static String[] getKeyExpressions(String methodName, String fileName){
-        //TODO: ADD STRINGBUILDER TO CHECK INDIVIDUAL METHODS
+    public static String[] getMethodKeyExpressions(Method method){
+        File file = new File("src/main/java/keys/" + method.getDeclaringClass().getSimpleName() + "Key.java");
+        
         List<String> keyExpressions = new ArrayList<String>();
-        String file = convertFileToString(new File("src/main/java/keys/" + fileName + "Key.java"));
-
-        boolean inMethod = true;
-        for (String line : file.split("\n")) {
-            // Check if the line contains the target character
-            if (line.contains(methodName) || inMethod){
-                inMethod = true;
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(file))) {
+            String line;
+            boolean inMethod = false;
+            while ((line = fileReader.readLine()) != null) {
+                if (line.contains(method.getName())) inMethod = true;
+                
+                if (inMethod) {
+                    if (line.contains("//KEY")) {
+                        keyExpressions.add(line.replace("//KEY", "").trim());  
+                    }
+                }
+                
+                if (inMethod && line.length() == 2) inMethod = false;
             }
-            if (line == "\t}"){
-                inMethod = false;
-            }
-
-            if (line.contains("//KEY")) {
-                keyExpressions.add(line.replace("//KEY", "").trim());
-            }
+            fileReader.close();
+        } catch (IOException e) {
+            System.out.println(e.getLocalizedMessage());
         }
-
-        String[] returnE= new String[keyExpressions.size()];
-        for (int i = 0; i < keyExpressions.size(); i++){
-            returnE[i] = keyExpressions.get(i);
-        }
-
-        return returnE;
+        return keyExpressions.toArray(String[]::new);
     }
 }

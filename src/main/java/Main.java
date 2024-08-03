@@ -3,17 +3,13 @@ import java.lang.reflect.Method;
 import keys.Lesson1Key;
 import lessons.Lesson1;
 import validation.FileReadValidatedMethod;
-import validation.FileReadValidator;
 import validation.Reporter;
 import validation.TestCaseValidatedMethod;
 import validation.ValidatedMethod;
 
 class Main {
-    public static void main(String[] args) {
-        String[] a = {"double myFirstVariable = 3.0;"};
-        FileReadValidatedMethod testMethod = new FileReadValidatedMethod(Lesson1.class.getMethods()[0], a);
-        System.out.println(FileReadValidator.getMethodAsString(testMethod));
-        System.out.println(testMethod.isMethodValid());
+    public static void main(String[] args) { 
+        run();
     }
     
     static void run(){
@@ -35,8 +31,9 @@ class Main {
                     keyClass = Lesson1Key.class;
                     break;
             }
-    
-            ValidatedMethod[] passedMethods = new ValidatedMethod[lessonClass.getMethods().length];
+            
+            //TODO: GET METHODS IN ORDER
+            ValidatedMethod[] passedMethods = new ValidatedMethod[lessonClass.getDeclaredMethods().length];
             
             for (int i = 0; i < lessonClass.getDeclaredMethods().length; i++){
                 Method method = lessonClass.getDeclaredMethods()[i];
@@ -82,13 +79,7 @@ class Main {
     }
 
     static ValidatedMethod keyExpressionValidate(Method method, String fileName){
-        FileReadValidatedMethod fileReadMethod = new FileReadValidatedMethod(method, FileReadValidator.getKeyExpressions(method.getName(), fileName));
-        FileReadValidator.validateExpressions(fileReadMethod);
-
-        // make sure method is validated correctly before returning
-        ValidatedMethod castedMethod = (ValidatedMethod) fileReadMethod;
-        if (fileReadMethod.isMethodValid()) castedMethod.validateMethod(); 
-
-        return castedMethod;
+        FileReadValidatedMethod fileReadMethod = new FileReadValidatedMethod(method);
+        return (ValidatedMethod) fileReadMethod;
     }
 }
