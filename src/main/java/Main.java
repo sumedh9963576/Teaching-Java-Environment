@@ -1,7 +1,15 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import keys.Lesson1Key;
+import keys.Lesson2Key;
 import lessons.Lesson1;
+import lessons.Lesson2;
 import validation.FileReadValidatedMethod;
 import validation.Reporter;
 import validation.TestCaseValidatedMethod;
@@ -15,6 +23,7 @@ class Main {
     static void run(){
         String[] lessons = new String[] {
             "Lesson1",
+            "Lesson2",
         };
     
         for (String lesson : lessons){
@@ -26,17 +35,21 @@ class Main {
                     lessonClass = Lesson1.class;
                     keyClass = Lesson1Key.class;
                     break;
+                case "Lesson2":
+                    lessonClass = Lesson2.class;
+                    keyClass = Lesson2Key.class;
+                    break;
                 default:
                     lessonClass = Lesson1.class;
                     keyClass = Lesson1Key.class;
                     break;
             }
             
-            //TODO: GET METHODS IN ORDER
             ValidatedMethod[] passedMethods = new ValidatedMethod[lessonClass.getDeclaredMethods().length];
-            
-            for (int i = 0; i < lessonClass.getDeclaredMethods().length; i++){
-                Method method = lessonClass.getDeclaredMethods()[i];
+            Method[] methods = orderMethods(lessonClass.getDeclaredMethods());
+
+            for (int i = 0; i < methods.length; i++){
+                Method method = methods[i];
 
                 if (!method.getReturnType().equals(void.class)){
                     if (method.getParameterCount() == 0){
@@ -81,5 +94,25 @@ class Main {
     static ValidatedMethod keyExpressionValidate(Method method, String fileName){
         FileReadValidatedMethod fileReadMethod = new FileReadValidatedMethod(method);
         return (ValidatedMethod) fileReadMethod;
+    }
+
+    static Method[] orderMethods(Method[] methods){
+        File file = new File("src/main/java/keys/" + methods[0].getDeclaringClass().getSimpleName() + "Key.java");
+        
+        List<Method> orderedMethods = new ArrayList<Method>();
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = fileReader.readLine()) != null) {
+                for (int i = 0; i < methods.length; i++){
+                    if (line.contains(methods[i].getName())) { 
+                        orderedMethods.add(methods[i]);
+                    }
+                }
+            }
+            fileReader.close();
+        } catch (IOException e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+        return orderedMethods.toArray(Method[]::new);
     }
 }

@@ -54,7 +54,7 @@ public class Reporter {
 
     public static void report(String name, boolean pass, IndentationLevel indentationLevel){
         StringBuilder report = new StringBuilder();
-        report.append(pass ? ColorCodes.GREEN.code : ColorCodes.RED.code);
+        report.append(pass ? ColorCodes.GREEN.code : ColorCodes.YELLOW.code);
         for (int i = 0; i < indentationLevel.level; i++){
             report.append("\t");
         }
@@ -67,7 +67,7 @@ public class Reporter {
 
     public static void reportErrorMessage(String errorMessage){
         StringBuilder report = new StringBuilder();
-        report.append(ColorCodes.YELLOW.code);
+        report.append(ColorCodes.RED.code);
         for (int i = 0; i < IndentationLevel.ERROR_MESSAGE.level; i++){
             report.append("\t");
         }
