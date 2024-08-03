@@ -14,6 +14,7 @@ public class FileReadValidatedMethod extends ValidatedMethod{
         for (int i = 0; i < validatedExpressions.length; i++){
             validatedExpressions[i] = false;
         }
+        FileReadValidator.validateExpressions(this);
     }
 
     public String[] getKeyExpressions(){

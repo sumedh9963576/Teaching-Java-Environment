@@ -10,8 +10,10 @@ import validation.ValidatedMethod;
 
 class Main {
     public static void main(String[] args) {
-        System.out.println(FileReadValidator.getMethodAsString("exercise1", "Lesson1"));
-        System.out.println(FileReadValidator.validateExpressions(new FileReadValidatedMethod(Lesson1.class.getMethods()[0], new String[2])));
+        String[] a = {"double myFirstVariable = 3.0;"};
+        FileReadValidatedMethod testMethod = new FileReadValidatedMethod(Lesson1.class.getMethods()[0], a);
+        System.out.println(FileReadValidator.getMethodAsString(testMethod));
+        System.out.println(testMethod.isMethodValid());
     }
     
     static void run(){
