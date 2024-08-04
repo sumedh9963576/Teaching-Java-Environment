@@ -46,7 +46,7 @@ public class TestCaseValidatedMethod extends ValidatedMethod {
         
         for (Type type : parameterTypes){
             try {
-                ParameterGenerator.getRandomValue(type.getTypeName());
+                ParameterGenerator.generateParameter(type, method);
             } catch (Exception exception) {
                 exception.printStackTrace();
             };

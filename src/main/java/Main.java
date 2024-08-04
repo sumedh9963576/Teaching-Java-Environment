@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,13 +12,25 @@ import keys.Lesson2Key;
 import lessons.Lesson1;
 import lessons.Lesson2;
 import validation.FileReadValidatedMethod;
+import validation.FileReadValidator;
+import validation.ParameterGenerator;
 import validation.Reporter;
 import validation.TestCaseValidatedMethod;
 import validation.ValidatedMethod;
 
 class Main {
     public static void main(String[] args) { 
-        run();
+        //run();
+        Method m = orderMethods(Lesson2.class.getMethods())[4];
+
+        System.out.println(String[].class.getSimpleName());
+        try {
+            //for (int i : new int[10000]){
+                //System.out.println(ParameterGenerator.generateParameter(double.class));
+            //}
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
     
     static void run(){
@@ -76,7 +89,7 @@ class Main {
                 validatedMethod.validateMethod();
             }
         } catch (Exception exception){
-            validatedMethod.setErrorMessage(exception.getLocalizedMessage());
+            validatedMethod.setErrorMessage(exception.toString().replace(": keys." + keyClass.getSimpleName() + "." + method.getName() + "()", ""));
         }
         return validatedMethod;
     }
@@ -86,7 +99,7 @@ class Main {
             return new TestCaseValidatedMethod(method, keyClass.getMethod(method.getName()), 5);
         } catch (Exception exception){
             ValidatedMethod errorMethod = new ValidatedMethod(method);
-            errorMethod.setErrorMessage(exception.getLocalizedMessage());
+            errorMethod.setErrorMessage(exception.toString().replace(": keys." + keyClass.getSimpleName() + "." + method.getName() + "()", ""));
             return errorMethod;
         }
     }

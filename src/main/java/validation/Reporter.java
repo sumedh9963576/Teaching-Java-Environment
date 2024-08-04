@@ -47,7 +47,7 @@ public class Reporter {
         for (ValidatedMethod method : methods){
             report(method.getMethod().getName(), method.isMethodValid(), IndentationLevel.METHOD);
             if (method.getErrorMessage() != ""){
-                reportErrorMessage(fileName);
+                reportErrorMessage(method.getErrorMessage());
             }  
         }
     }
