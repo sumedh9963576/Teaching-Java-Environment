@@ -25,7 +25,7 @@ public class Lesson2Key {
 	}
 
 	public boolean exercise5(double i){
-		//double, min
+        //double:0,100
 		if (i/2.0 > 2.0){
 			return true;
 		} else {

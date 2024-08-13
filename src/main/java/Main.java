@@ -13,24 +13,13 @@ import lessons.Lesson1;
 import lessons.Lesson2;
 import validation.FileReadValidatedMethod;
 import validation.FileReadValidator;
-import validation.ParameterGenerator;
 import validation.Reporter;
 import validation.TestCaseValidatedMethod;
 import validation.ValidatedMethod;
 
 class Main {
-    public static void main(String[] args) { 
-        //run();
-        Method m = orderMethods(Lesson2.class.getMethods())[4];
-
-        System.out.println(String[].class.getSimpleName());
-        try {
-            //for (int i : new int[10000]){
-                //System.out.println(ParameterGenerator.generateParameter(double.class));
-            //}
-        } catch(Exception e){
-            e.printStackTrace();
-        }
+    public static void main(String[] args) {
+        run();
     }
     
     static void run(){
@@ -61,16 +50,18 @@ class Main {
             ValidatedMethod[] passedMethods = new ValidatedMethod[lessonClass.getDeclaredMethods().length];
             Method[] methods = orderMethods(lessonClass.getDeclaredMethods());
 
+            Method[] keyMethods = orderMethods(keyClass.getDeclaredMethods());
+
             for (int i = 0; i < methods.length; i++){
                 Method method = methods[i];
 
                 if (!method.getReturnType().equals(void.class)){
                     if (method.getParameterCount() == 0){
                         //return value and key validation
-                        passedMethods[i] = returnAndKeyValidate(method, keyClass);
+                        passedMethods[i] = returnValueValidation(method, keyMethods[i]);
                     } else {
                         // test case checker
-                        passedMethods[i] = testCaseValidate(method, keyClass);
+                        passedMethods[i] = testCaseValidate(method, keyMethods[i]);
                     }
                 } else {
                     // text analyze validation
@@ -82,24 +73,25 @@ class Main {
         }
     }
 
-    static ValidatedMethod returnAndKeyValidate(Method method, Class<?> keyClass){
+    static ValidatedMethod returnValueValidation(Method method, Method keyMethod){
         ValidatedMethod validatedMethod = new ValidatedMethod(method);
         try {
-            if (method.invoke(method.getDeclaringClass().getConstructor().newInstance()).equals(keyClass.getMethod(method.getName()).invoke(keyClass.getConstructor().newInstance()))){
+            if (method.invoke(method.getDeclaringClass().getConstructor().newInstance()).equals(method.invoke(method.getDeclaringClass().getConstructor().newInstance()))){
                 validatedMethod.validateMethod();
             }
         } catch (Exception exception){
-            validatedMethod.setErrorMessage(exception.toString().replace(": keys." + keyClass.getSimpleName() + "." + method.getName() + "()", ""));
+            validatedMethod.setErrorMessage("(Line " + exception.getStackTrace()[2].getLineNumber() + ") " + exception.toString().replace(": keys." + keyMethod.getDeclaringClass().getSimpleName() + "." + method.getName() + "()", ""));
         }
         return validatedMethod;
     }
 
-    static ValidatedMethod testCaseValidate(Method method, Class<?> keyClass){
+    static ValidatedMethod testCaseValidate(Method method, Method keyMethod){
         try{
-            return new TestCaseValidatedMethod(method, keyClass.getMethod(method.getName()), 5);
+            return new TestCaseValidatedMethod(method, keyMethod);
         } catch (Exception exception){
             ValidatedMethod errorMethod = new ValidatedMethod(method);
-            errorMethod.setErrorMessage(exception.toString().replace(": keys." + keyClass.getSimpleName() + "." + method.getName() + "()", ""));
+            exception.getStackTrace();
+            errorMethod.setErrorMessage("(Line " + exception.getStackTrace()[2].getLineNumber() + ") " + exception.toString().replace(": keys." + keyMethod.getDeclaringClass().getSimpleName() + "." + method.getName() + "()", ""));
             return errorMethod;
         }
     }
@@ -110,14 +102,15 @@ class Main {
     }
 
     static Method[] orderMethods(Method[] methods){
-        File file = new File("src/main/java/keys/" + methods[0].getDeclaringClass().getSimpleName() + "Key.java");
+        boolean isKeyClass = methods[0].getDeclaringClass().getSimpleName().contains("Key");
+        File file = new File("src/main/java/" + (isKeyClass ? "keys" : "lessons") + "/" + methods[0].getDeclaringClass().getSimpleName() + ".java");
         
         List<Method> orderedMethods = new ArrayList<Method>();
         try (BufferedReader fileReader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = fileReader.readLine()) != null) {
                 for (int i = 0; i < methods.length; i++){
-                    if (line.contains(methods[i].getName())) { 
+                    if (line.contains(methods[i].getName())) {
                         orderedMethods.add(methods[i]);
                     }
                 }

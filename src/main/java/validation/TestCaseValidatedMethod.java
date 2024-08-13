@@ -1,23 +1,24 @@
 package validation;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 
 public class TestCaseValidatedMethod extends ValidatedMethod {
     
     private Method keyMethod;
-    private Type[] parameterTypes;
     private Object[][] testCases;
     private boolean[] validatedTestCases;
 
-    public TestCaseValidatedMethod(Method method, Method keyMethod, int testCaseCount){ 
+    public TestCaseValidatedMethod(Method method, Method keyMethod){ 
         super(method);
         this.keyMethod = keyMethod;
-        for (int i = 0; i < testCaseCount; i++){
-            this.testCases[i] = generateParameters();
+        try {
+            this.testCases = TestCases.getTestCase(method);
+        } catch (Exception exception){
+            exception.printStackTrace();
         }
 
         boolean isMethodValid = true;
+        this.validatedTestCases = new boolean[testCases.length];
         for (int i = 0; i < testCases.length; i++){
             validatedTestCases[i] = validateTestCase(testCases[i]);
             if (!validatedTestCases[i]){
@@ -41,24 +42,11 @@ public class TestCaseValidatedMethod extends ValidatedMethod {
         return validatedTestCases[index];
     }
 
-    private Object[] generateParameters(){
-        Object[] newTestCase = new Object[parameterTypes.length];
-        
-        for (Type type : parameterTypes){
-            try {
-                ParameterGenerator.generateParameter(type, method);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            };
-        }
-        return newTestCase;
-    }
-
     public boolean validateTestCase(Object[] testCase){
         try {
-            return method.invoke(method.getDeclaringClass(), testCase).equals(keyMethod.invoke(keyMethod.getDeclaringClass(), testCase));
+            return method.invoke(method.getDeclaringClass().getConstructor().newInstance(), testCase).equals(keyMethod.invoke(keyMethod.getDeclaringClass().getConstructor().newInstance(), testCase));
         } catch (Exception exception){
-            System.out.println(exception.getStackTrace());
+            exception.printStackTrace();
             return false;
         }
     }
