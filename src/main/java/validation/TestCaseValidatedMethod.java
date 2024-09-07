@@ -7,26 +7,31 @@ public class TestCaseValidatedMethod extends ValidatedMethod {
     private Method keyMethod;
     private Object[][] testCases;
     private boolean[] validatedTestCases;
+    private String[] errorMessages;
 
     public TestCaseValidatedMethod(Method method, Method keyMethod){ 
         super(method);
         this.keyMethod = keyMethod;
         try {
-            this.testCases = TestCases.getTestCase(method);
+            this.testCases = TestCases.getTestCases(method);
         } catch (Exception exception){
             exception.printStackTrace();
         }
 
+        this.errorMessages = new String[testCases.length];
+
         boolean isMethodValid = true;
         this.validatedTestCases = new boolean[testCases.length];
         for (int i = 0; i < testCases.length; i++){
-            validatedTestCases[i] = validateTestCase(testCases[i]);
+            validatedTestCases[i] = validateTestCase(testCases[i], i);
             if (!validatedTestCases[i]){
                 isMethodValid = false;
             }
         }
         if (isMethodValid){
             validateMethod();
+        } else {
+            setReportMessage(Reporter.formatTestCaseReport(testCases, validatedTestCases, errorMessages));
         }
     }
 
@@ -42,11 +47,12 @@ public class TestCaseValidatedMethod extends ValidatedMethod {
         return validatedTestCases[index];
     }
 
-    public boolean validateTestCase(Object[] testCase){
+    public boolean validateTestCase(Object[] testCase, int testCaseIndex){
         try {
             return method.invoke(method.getDeclaringClass().getConstructor().newInstance(), testCase).equals(keyMethod.invoke(keyMethod.getDeclaringClass().getConstructor().newInstance(), testCase));
         } catch (Exception exception){
-            exception.printStackTrace();
+            exception.printStackTrace(); //TODO: this lmao
+            errorMessages[testCaseIndex] = "(Line " + exception.getStackTrace()[3].getLineNumber() + ") " + exception.toString().replace(": keys." + keyMethod.getDeclaringClass().getSimpleName() + "." + method.getName() + "()", "");
             return false;
         }
     }

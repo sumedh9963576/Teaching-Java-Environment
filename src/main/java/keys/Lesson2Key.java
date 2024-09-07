@@ -16,20 +16,15 @@ public class Lesson2Key {
 		return false;
 	}
 
-	public double exercise4(boolean t){
-		if (t){
+	public double exercise4(boolean trueOrFalse){
+		if (trueOrFalse){
 			return 2.0;
 		} else {
 			return 4.0;
 		}
 	}
 
-	public boolean exercise5(double i){
-        //double:0,100
-		if (i/2.0 > 2.0){
-			return true;
-		} else {
-			return false;
-		}
+	public boolean exercise5(int i){
+		return i%2==0;
 	}
 }

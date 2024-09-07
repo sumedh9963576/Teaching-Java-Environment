@@ -7,12 +7,12 @@ public class ValidatedMethod {
     
     protected Method method;
     private boolean isValidated;
-    private String errorMessage;
+    private String reportMessage;
 
     public ValidatedMethod(Method method){
         this.method = method;
         this.isValidated = false;
-        this.errorMessage = "";
+        this.reportMessage = "";
     }
 
     public Method getMethod(){
@@ -27,12 +27,11 @@ public class ValidatedMethod {
         return isValidated;
     }
 
-    public void setErrorMessage(String errorMessage){
-        this.errorMessage = errorMessage; 
+    public void setReportMessage(String reportMessage){
+        this.reportMessage = reportMessage;
     }
 
-    public String getErrorMessage(){
-        return errorMessage;
+    public String getReportMessage(){
+        return reportMessage;
     }
-    
 }

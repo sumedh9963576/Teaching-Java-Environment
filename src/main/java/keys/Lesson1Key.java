@@ -10,6 +10,5 @@ public class Lesson1Key {
 
 	public void exercise2(){
 		double anotherVariable = 25.0;//KEY
-		String anothera = "a";//KEY
 	}
 }

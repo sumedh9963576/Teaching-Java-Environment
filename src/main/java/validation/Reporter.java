@@ -25,7 +25,7 @@ public class Reporter {
         
         FILE(0),
         METHOD(1),
-        ERROR_MESSAGE(2);
+        REPORT_MESSAGE(2);
 
         public final int level;
 
@@ -46,8 +46,8 @@ public class Reporter {
 
         for (ValidatedMethod method : methods){
             report(method.getMethod().getName(), method.isMethodValid(), IndentationLevel.METHOD);
-            if (method.getErrorMessage() != ""){
-                reportErrorMessage(method.getErrorMessage());
+            if (method.getReportMessage() != ""){
+                System.out.println(method.getReportMessage());
             }  
         }
     }
@@ -55,9 +55,7 @@ public class Reporter {
     public static void report(String name, boolean pass, IndentationLevel indentationLevel){
         StringBuilder report = new StringBuilder();
         report.append(pass ? ColorCodes.GREEN.code : ColorCodes.YELLOW.code);
-        for (int i = 0; i < indentationLevel.level; i++){
-            report.append("\t");
-        }
+        for (int i = 0; i < indentationLevel.level; i++) report.append("\t");
         report.append(name + ": ");
         report.append(pass ? "PASS" : "FAIL");
         report.append(ColorCodes.RESET.code);
@@ -65,30 +63,32 @@ public class Reporter {
         System.out.println(report.toString());
     }
 
-    public static void reportErrorMessage(String errorMessage){
+    // CHANGE TO GET FORMAT
+    public static String formatErrorMessage(String errorMessage){
         StringBuilder report = new StringBuilder();
         report.append(ColorCodes.RED.code);
-        for (int i = 0; i < IndentationLevel.ERROR_MESSAGE.level; i++){
-            report.append("\t");
-        }
+        for (int i = 0; i < IndentationLevel.REPORT_MESSAGE.level; i++) report.append("\t");
         report.append("ERROR: " + errorMessage.toString());
         report.append(ColorCodes.RESET.code);
 
-        System.out.println(report.toString());
+        return report.toString();
     }
 
-    /*-
-    public static void reportTestCase(Object[] testCase, boolean pass){
+    public static String formatTestCaseReport(Object[][] testCases, boolean[] passedTestCases, String[] errorMessages){
         StringBuilder report = new StringBuilder();
-        report.append(pass ? ColorCodes.GREEN.code : ColorCodes.RED.code);
-        for (int i = 0; i < IndentationLevel.TESTCASE.level; i++){
-            report.append("\t");
+        for (int i = 0; i < testCases.length; i++){
+            report.append(passedTestCases[i] ? ColorCodes.GREEN.code : ColorCodes.RED.code);
+            for (int l = 0; l < IndentationLevel.REPORT_MESSAGE.level; l++) report.append("\t");
+            report.append("{" );
+            for (int p = 0; p < testCases[i].length; p++){
+                report.append(testCases[i][p].getClass().getSimpleName().toUpperCase() + ":");
+                report.append(testCases[i][p]);
+                if (p < testCases[i].length - 1) report.append(", ");
+            }
+            report.append(passedTestCases[i] ? "}: PASS" : "}: FAIL (" + errorMessages[i] + ")");
+            report.append(ColorCodes.RESET.code);
+            if (i < testCases.length - 1) report.append("\n");
         }
-        report.append("The test case of " + testCase.toString() + " ");
-        report.append(pass ? "PASSES" : "FAILS");
-        report.append(ColorCodes.RESET.code);
-
-        System.out.println(report.toString());
+        return report.toString();
     }
-    */
 }
