@@ -87,4 +87,8 @@ public class A_VariablesKey {
         int num2 = 5;
         double myDouble = num1 + num2;
     }
+
+    public double fahrenheitToCelsius(double fahrenheit){
+        return (fahrenheit - 32) * 5/9;
+    }
 }

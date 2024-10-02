@@ -4,63 +4,8 @@ public class Z_Challenge4Key {
 
     public Z_Challenge4Key(){}
 
-    public void exercise1(){
-        // Write a function that finds the shortest path in a graph using Dijkstra's algorithm
-        int[][] graph = {
-            {0, 10, 20, 0, 0},
-            {10, 0, 0, 50, 10},
-            {20, 0, 0, 20, 33},
-            {0, 50, 20, 0, 2},
-            {0, 10, 33, 2, 0}
-        };
-        int[] distances = dijkstra(graph, 0);
-        for(int dist : distances){
-            System.out.println(dist);  // shortest path from node 0
-        }
-    }
-
-    public int[] dijkstra(int[][] graph, int start){
-        int n = graph.length;
-        int[] dist = new int[n];
-        boolean[] visited = new boolean[n];
-        for(int i = 0; i < n; i++){
-            dist[i] = Integer.MAX_VALUE;
-        }
-        dist[start] = 0;
-        for(int i = 0; i < n - 1; i++){
-            int u = findMinDistance(dist, visited);
-            visited[u] = true;
-            for(int v = 0; v < n; v++){
-                if(!visited[v] && graph[u][v] != 0 && dist[u] != Integer.MAX_VALUE && dist[u] + graph[u][v] < dist[v]){
-                    dist[v] = dist[u] + graph[u][v];
-                }
-            }
-        }
-        return dist;
-    }
-
-    private int findMinDistance(int[] dist, boolean[] visited){
-        int min = Integer.MAX_VALUE;
-        int minIndex = -1;
-        for(int v = 0; v < dist.length; v++){
-            if(!visited[v] && dist[v] < min){
-                min = dist[v];
-                minIndex = v;
-            }
-        }
-        return minIndex;
-    }
-
-    public void exercise2(){
-        // Write a function that implements the quicksort algorithm to sort an array
-        int[] arr = {10, 7, 8, 9, 1, 5};
-        quicksort(arr, 0, arr.length - 1);
-        for(int num : arr){
-            System.out.println(num);  // should print sorted array
-        }
-    }
-
     public void quicksort(int[] arr, int low, int high){
+        // DO BUT BETTER
         if(low < high){
             int pi = partition(arr, low, high);
             quicksort(arr, low, pi - 1);
