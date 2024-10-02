@@ -7,10 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import keys.A_VariablesKey;
-import keys.Lesson1Key;
-import keys.Lesson2Key;
-import lessons.Lesson1;
-import lessons.Lesson2;
+import keys.B_ConditionalsKey;
+import keys.C_LoopsKey;
+import keys.D_ArraysKey;
+import keys.Z_ChallengesKey;
+import lessons.A_Variables;
+import lessons.B_Conditionals;
+import lessons.C_Loops;
+import lessons.D_Arrays;
+import lessons.Z_Challenges;
 import validation.FileReadValidatedMethod;
 import validation.Reporter;
 import validation.TestCaseValidatedMethod;
@@ -31,15 +36,27 @@ class Main {
             switch (lesson) {
                 case "A_Variables":
                     lessonClass = A_Variables.class;
-                    keyClass = A_Variables.class;
+                    keyClass = A_VariablesKey.class;
                     break;
-                case "Lesson2":
-                    lessonClass = Lesson2.class;
-                    keyClass = Lesson2Key.class;
+                case "B_Conditionals":
+                    lessonClass = B_Conditionals.class;
+                    keyClass = B_ConditionalsKey.class;
+                    break;
+                case "C_Loops":
+                    lessonClass = C_Loops.class;
+                    keyClass = C_LoopsKey.class;
+                    break;
+                case "D_Arrays":
+                    lessonClass = D_Arrays.class;
+                    keyClass = D_ArraysKey.class;
+                    break;
+                case "Z_Challenges":
+                    lessonClass = Z_Challenges.class;
+                    keyClass = Z_ChallengesKey.class;
                     break;
                 default:
-                    lessonClass = Lesson1.class;
-                    keyClass = Lesson1Key.class;
+                    lessonClass = A_Variables.class;
+                    keyClass = A_VariablesKey.class;
                     break;
             }
             
