@@ -83,9 +83,9 @@ public class C_LoopsKey {
 
     public void exercise11(){
         // Write a for loop that finds the first 10 numbers of the Fibonacci sequence
+        // Write a for loop that finds the first 10 numbers of the Fibonacci sequence
         int a = 0, b = 1;
         for(int i = 0; i < 10; i++){
-            System.out.println(a);
             int next = a + b;
             a = b;
             b = next;
@@ -95,6 +95,8 @@ public class C_LoopsKey {
     public String exercise13(String str){
         // Write a loop to reverse a string
         String reversed = "";
+        for(int i = str.length() - 1; i >= 0; i--){
+            reversed += str.charAt(i);
         for(int i = str.length() - 1; i >= 0; i--){
             reversed += str.charAt(i);
         }

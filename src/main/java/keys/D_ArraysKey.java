@@ -5,12 +5,12 @@ public class D_ArraysKey {
     public D_ArraysKey(){}
 
     public void exercise1(){
-        // Declare an array of integers with values 1, 2, 3, 4, 5 and print each value
+        // Declare an array of integers with values 1, 2, 3, 4, 5
         int[] numbers = {1, 2, 3, 4, 5};
     }
 
     public void exercise2(){
-        // Declare a String array with the names of the days of the week and print each day
+        // Declare a String array with the names of the days of the week, (EX: "Monday", "Friday")
         String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     }
 
@@ -25,10 +25,10 @@ public class D_ArraysKey {
     }
 
     public void exercise4(){
-        // Declare an array of 5 integers and initialize all elements to 0
+        // Declare an array of 5 integers and initialize all elements to 5
         int[] arr = new int[5];
         for(int i = 0; i < arr.length; i++){
-            arr[i] = 0;
+            arr[i] = 5;
         }
     }
     
@@ -62,6 +62,7 @@ public class D_ArraysKey {
     }
 
     public boolean containsNumber(int[] arr, int target){
+        // Write a method that takes an array of integers and a target number and returns if the array contains the target value or not
         for(int i = 0; i < arr.length; i++){
             if(arr[i] == target){
                 return true;
