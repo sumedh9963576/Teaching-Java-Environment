@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import keys.A_VariablesKey;
 import keys.Lesson1Key;
 import keys.Lesson2Key;
 import lessons.Lesson1;
@@ -28,9 +29,9 @@ class Main {
             Class<?> keyClass;
     
             switch (lesson) {
-                case "Lesson1":
-                    lessonClass = Lesson1.class;
-                    keyClass = Lesson1Key.class;
+                case "A_Variables":
+                    lessonClass = A_Variables.class;
+                    keyClass = A_Variables.class;
                     break;
                 case "Lesson2":
                     lessonClass = Lesson2.class;
