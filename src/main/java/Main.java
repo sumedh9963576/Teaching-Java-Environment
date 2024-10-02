@@ -23,7 +23,13 @@ import validation.ValidatedMethod;
 
 class Main {
     public static void main(String[] args) {
+        // Run the current problem with the format 'CurrentFileName.CurrentProblemName()'
+        runChecker();
         
+    }
+    
+    public static void runChecker(){
+
         String[] lessons = new String[] {
             "Lesson1",
             "Lesson2",

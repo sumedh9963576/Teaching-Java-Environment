@@ -30,32 +30,7 @@ public class TestCases {
     }
 
     public static Object[][] getTestCases(Method method) throws Exception{
-
         return testCases.get(method.getName());
-
-        /*- 
-        switch (method.getName().replace("()", "")) {
-            case "exercise4":
-                return new Object[][] {
-                    {true},
-                    {false}
-                };
-            case "isEven":
-                return new Object[][] {
-                    {2},
-                    {0},
-                    {1253},
-                    {247483647},
-                    {-2134},
-                    {-247483648}
-                };
-
-
-            default:
-                throw INVALID_METHOD;
-        }
-
-        */
     }
 
 

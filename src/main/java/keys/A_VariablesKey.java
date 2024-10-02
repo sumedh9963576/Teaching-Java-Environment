@@ -3,8 +3,6 @@ package keys;
 public class A_VariablesKey {
 
     public A_VariablesKey(){}
-
-    @SuppressWarnings("unused")
     
     public void exercise1(){
         // Declare a double variable 'myFirstVariable' to a value of 3

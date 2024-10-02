@@ -51,7 +51,6 @@ public class TestCaseValidatedMethod extends ValidatedMethod {
         try {
             return method.invoke(method.getDeclaringClass().getConstructor().newInstance(), testCase).equals(keyMethod.invoke(keyMethod.getDeclaringClass().getConstructor().newInstance(), testCase));
         } catch (Exception exception){
-            exception.printStackTrace(); //TODO: this lmao
             errorMessages[testCaseIndex] = "(Line " + exception.getStackTrace()[3].getLineNumber() + ") " + exception.toString().replace(": keys." + keyMethod.getDeclaringClass().getSimpleName() + "." + method.getName() + "()", "");
             return false;
         }

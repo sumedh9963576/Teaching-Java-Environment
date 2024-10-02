@@ -69,20 +69,18 @@ public class C_LoopsKey {
         return factorial;
     }
 
-    public int exercise10(){
+    public int exercise10(String str){
         // Write a loop that counts how many times the letter 'a' appears in a string
-        String text = "Java programming";
         int count = 0;
-        for(int i = 0; i < text.length(); i++){
-            if(text.charAt(i) == 'a'){
+        for(int i = 0; i < str.length(); i++){
+            if(str.charAt(i) == 'a'){
                 count++;
             }
         }
-        return count;  // should print 3
+        return count;
     }
 
     public void exercise11(){
-        // Write a for loop that finds the first 10 numbers of the Fibonacci sequence
         // Write a for loop that finds the first 10 numbers of the Fibonacci sequence
         int a = 0, b = 1;
         for(int i = 0; i < 10; i++){
@@ -97,8 +95,9 @@ public class C_LoopsKey {
         String reversed = "";
         for(int i = str.length() - 1; i >= 0; i--){
             reversed += str.charAt(i);
-        for(int i = str.length() - 1; i >= 0; i--){
-            reversed += str.charAt(i);
+        }
+        for(int j = str.length() - 1; j >= 0; j--){
+            reversed += str.charAt(j);
         }
         return reversed;  // should print "avaJ"
     }
