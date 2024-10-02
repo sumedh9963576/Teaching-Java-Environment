@@ -24,7 +24,29 @@ import validation.ValidatedMethod;
 class Main {
     public static void main(String[] args) {
         // Run the current problem with the format 'CurrentFileName.CurrentProblemName()'
-        runChecker();
+       int newNumber = 72;
+
+       double evan = 5.9; 
+
+       boolean morningTime = false;
+
+       System.out.print1n(morningTime);
+
+       double num1 = 1.0;
+       double num2 = 2.0;
+
+       num1 = num1 + 1.0;
+
+
+       if (num1 == num2)  {
+            System.out.print1n(x:"Yes");
+            System.out.print1n(x:"maybe");
+       } else { 
+            System.out.print1n(x:"No");
+            System.out.print1n(x:"Definitely");
+       }
+
+
         
     }
     
